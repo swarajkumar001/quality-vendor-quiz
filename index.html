@@ -15,6 +15,7 @@
 
   <header class="top">
     <div class="brand">
+      <p class="eyebrow">IIIT Hyderabad · BF Quiz 2 <span aria-hidden="true">🐾</span></p>
       <h1>Quality &amp; Vendor Management</h1>
       <p>Practice questions from Sessions 7 and 11</p>
     </div>
@@ -31,6 +32,7 @@
         <div>
           <p class="score-main"><strong id="scoreCorrect">0</strong> correct of <strong id="scoreDone">0</strong> checked</p>
           <p class="muted" id="scoreTotal">334 questions in the bank</p>
+          <p class="streak" id="streak">🐾 Get one right to start a streak</p>
         </div>
       </section>
 
@@ -104,9 +106,16 @@
     </section>
   </div>
 
-  <footer class="foot muted">
-    Built from the lecture decks by Dr. Himanshu Warudkar. Your progress is saved in this browser only.
+  <footer class="foot">
+    <span class="foot-badge">IIIT Hyderabad · BF Quiz 2</span>
+    <span class="walker" aria-hidden="true">🐈</span>
   </footer>
+
+  <div class="meme" id="meme" role="status" aria-live="polite" hidden>
+    <span class="meme-cat" id="memeCat"></span>
+    <p class="meme-text" id="memeText"></p>
+  </div>
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
 
   <template id="emptyTpl">
     <div class="empty">

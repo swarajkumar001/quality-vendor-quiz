@@ -41,7 +41,85 @@
     picks: {},                        // id -> [..] unsaved selections
     order: [],
     idx: 0,
+    streak: 0,                        // correct answers in a row, this visit only
   };
+  let lastCardId = null;
+
+  // ------------------------------------------------------------ cat memes
+  const MEMES = {
+    ok: [
+      ["😸", "Purr-fect! You nailed it."],
+      ["😻", "Meow-velous answer!"],
+      ["😼", "Cool cat. Very correct."],
+      ["🐱", "Paw-sitively right!"],
+      ["😺", "Deming would be proud. Meow."],
+      ["🐈", "Zero defects. Six Sigma cat."],
+    ],
+    part: [
+      ["😿", "So close! Not quite purr-fect."],
+      ["🐈", "Half the fish. Go get the rest."],
+      ["😾", "Partial credit. The cat is unimpressed."],
+    ],
+    bad: [
+      ["🙀", "Cat-astrophe!"],
+      ["😹", "Even the cat is laughing. Read the why!"],
+      ["😾", "Hiss. That's not it."],
+      ["🐈‍⬛", "Bad luck black cat. Try again!"],
+      ["😿", "Common-cause error. Fix the system, hooman."],
+    ],
+  };
+  const STREAK_MEMES = { 3: ["😼", "3 in a row! Hat-trick cat."], 5: ["🔥", "5 streak! Certified Top Cat."], 10: ["👑", "10 streak! Cat Royalty. Bow, hoomans."] };
+  const pickOne = a => a[Math.floor(Math.random() * a.length)];
+  const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let memeTimer;
+
+  function showMeme([cat, text], kind) {
+    const m = $("#meme");
+    $("#memeCat").textContent = cat;
+    $("#memeText").textContent = text;
+    m.className = `meme ${kind}`;
+    m.hidden = false;
+    void m.offsetWidth;               // restart the pop-in animation
+    m.classList.add("show");
+    clearTimeout(memeTimer);
+    memeTimer = setTimeout(() => { m.classList.remove("show"); setTimeout(() => (m.hidden = true), 300); }, 2600);
+  }
+
+  function confetti() {
+    if (reduceMotion()) return;
+    const box = $("#confetti");
+    const colors = ["#FF5DA2", "#FFB627", "#4FC3C1", "#B58BE0", "#5CCB7E", "#FF7B72"];
+    const r = checkBtn.getBoundingClientRect();
+    for (let i = 0; i < 46; i++) {
+      const p = document.createElement("i");
+      const ang = Math.random() * Math.PI * 2, dist = 120 + Math.random() * 220;
+      p.style.left = `${r.left + r.width / 2}px`;
+      p.style.top = `${r.top}px`;
+      p.style.background = pickOne(colors);
+      p.style.setProperty("--dx", `${Math.cos(ang) * dist}px`);
+      p.style.setProperty("--dy", `${Math.sin(ang) * dist - 160}px`);
+      p.style.setProperty("--rot", `${Math.random() * 720 - 360}deg`);
+      p.textContent = Math.random() < .15 ? "🐾" : "";
+      box.appendChild(p);
+      setTimeout(() => p.remove(), 1300);
+    }
+  }
+
+  function celebrate(result) {
+    state.streak = result === "ok" ? state.streak + 1 : 0;
+    renderStreak();
+    if (result === "ok") confetti();
+    if (result === "bad" && !reduceMotion()) {
+      card.classList.remove("shake"); void card.offsetWidth; card.classList.add("shake");
+    }
+    showMeme(result === "ok" && STREAK_MEMES[state.streak] ? STREAK_MEMES[state.streak] : pickOne(MEMES[result]), result);
+  }
+
+  function renderStreak() {
+    const s = state.streak, el = $("#streak");
+    el.textContent = s ? `🔥 ${s} in a row${s >= 5 ? ", Top Cat!" : ""}` : "🐾 Get one right to start a streak";
+    el.classList.toggle("hot", s >= 3);
+  }
 
   // ------------------------------------------------------------ dom
   const $ = s => document.querySelector(s);
@@ -175,6 +253,7 @@
     }
 
     card.className = `card type-${q.type.toLowerCase()}`;
+    if (q.id !== lastCardId) { void card.offsetWidth; card.classList.add("enter"); lastCardId = q.id; }
     card.innerHTML = html;
     math(card);
 
@@ -243,9 +322,11 @@
     }
     const sel = state.picks[q.id] || [];
     if (!sel.length) return;
-    state.progress[q.id] = { sel, result: grade(q, sel) };
+    const result = grade(q, sel);
+    state.progress[q.id] = { sel, result };
     delete state.picks[q.id];
     render();
+    celebrate(result);
   }
 
   function go(i) {
