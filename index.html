@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quality &amp; Vendor Management Practice</title>
+  <meta name="description" content="334 MSQs and MCQs on Quality Management and Vendor Management, with instant answer checking and explanations.">
+  <link rel="stylesheet" href="assets/fonts.css">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%231C2541'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' stroke='%23fff' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+  <a class="skip" href="#card">Skip to question</a>
+
+  <header class="top">
+    <div class="brand">
+      <h1>Quality &amp; Vendor Management</h1>
+      <p>Practice questions from Sessions 7 and 11</p>
+    </div>
+    <div class="top-actions">
+      <button class="ghost" id="filtersToggle" aria-expanded="false" aria-controls="filters">Filters</button>
+      <button class="ghost" id="themeToggle" aria-label="Switch colour theme">Dark</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="filters" id="filters" aria-label="Question filters">
+      <section class="score" aria-live="polite">
+        <div class="score-ring" id="scoreRing"><span id="scorePct">0%</span></div>
+        <div>
+          <p class="score-main"><strong id="scoreCorrect">0</strong> correct of <strong id="scoreDone">0</strong> checked</p>
+          <p class="muted" id="scoreTotal">334 questions in the bank</p>
+        </div>
+      </section>
+
+      <fieldset>
+        <legend>Question type</legend>
+        <div class="seg" role="radiogroup" data-filter="type">
+          <button role="radio" data-value="ALL" aria-checked="true">All</button>
+          <button role="radio" data-value="MSQ" aria-checked="false">MSQ</button>
+          <button role="radio" data-value="MCQ" aria-checked="false">MCQ</button>
+        </div>
+        <p class="hint" id="typeHint">MSQ: one or more answers are right. MCQ: exactly one is.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Lecture</legend>
+        <div class="seg" role="radiogroup" data-filter="deck">
+          <button role="radio" data-value="ALL" aria-checked="true">Both</button>
+          <button role="radio" data-value="QM" aria-checked="false">Quality</button>
+          <button role="radio" data-value="VM" aria-checked="false">Vendor</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><label for="topic">Topic</label></legend>
+        <select id="topic"><option value="ALL">All topics</option></select>
+      </fieldset>
+
+      <fieldset>
+        <legend>Difficulty</legend>
+        <div class="chips" id="diffChips"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Show</legend>
+        <div class="seg seg-wrap" role="radiogroup" data-filter="status">
+          <button role="radio" data-value="ALL" aria-checked="true">Everything</button>
+          <button role="radio" data-value="NEW" aria-checked="false">Not tried</button>
+          <button role="radio" data-value="WRONG" aria-checked="false">My mistakes</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="toggles">
+        <legend>Options</legend>
+        <label class="switch"><input type="checkbox" id="shuffle"> <span>Shuffle question order</span></label>
+        <label class="switch"><input type="checkbox" id="instant" checked> <span>Check MCQs as soon as I pick</span></label>
+      </fieldset>
+
+      <button class="danger-link" id="resetBtn">Clear my progress</button>
+    </aside>
+
+    <main class="stage">
+      <div class="stage-head">
+        <p class="counter" id="counter">Question 1 of 334</p>
+        <div class="bar" aria-hidden="true"><span id="barFill"></span></div>
+      </div>
+
+      <article class="card" id="card" tabindex="-1" aria-live="polite"></article>
+
+      <nav class="pager" aria-label="Question navigation">
+        <button class="ghost" id="prevBtn">Previous</button>
+        <button class="primary" id="checkBtn">Check answer</button>
+        <button class="ghost" id="nextBtn">Next</button>
+      </nav>
+      <p class="keys muted">Keys: <kbd>A</kbd>–<kbd>D</kbd> or <kbd>1</kbd>–<kbd>4</kbd> pick, <kbd>Enter</kbd> checks, <kbd>←</kbd> <kbd>→</kbd> move.</p>
+
+      <section class="navigator" aria-label="Jump to a question">
+        <h2>All questions in this set</h2>
+        <p class="muted legend"><i class="dot ok"></i> correct <i class="dot part"></i> partly right <i class="dot bad"></i> wrong <i class="dot"></i> not tried</p>
+        <div class="grid" id="grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="foot muted">
+    Built from the lecture decks by Dr. Himanshu Warudkar. Your progress is saved in this browser only.
+  </footer>
+
+  <template id="emptyTpl">
+    <div class="empty">
+      <h2>No questions match these filters</h2>
+      <p>Pick a different topic or difficulty, or switch “Show” back to Everything.</p>
+      <button class="primary" id="clearFilters">Reset filters</button>
+    </div>
+  </template>
+
+  <script src="questions.js"></script>
+  <script defer src="vendor/katex/katex.min.js"></script>
+  <script defer src="vendor/katex/contrib/auto-render.min.js"></script>
+  <script defer src="app.js"></script>
+</body>
+</html>
