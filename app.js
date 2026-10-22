@@ -199,6 +199,14 @@
       frag.appendChild(b);
     });
     grid.replaceChildren(frag);
+    // keep the current question visible inside the navigator's own scroll box
+    const cur = grid.querySelector(".current");
+    if (cur && grid.scrollHeight > grid.clientHeight) {
+      const top = cur.offsetTop, bottom = top + cur.offsetHeight;
+      if (top < grid.scrollTop || bottom > grid.scrollTop + grid.clientHeight) {
+        grid.scrollTop = top - grid.clientHeight / 2 + cur.offsetHeight / 2;
+      }
+    }
   }
 
   function renderScore() {
